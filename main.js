@@ -256,7 +256,7 @@ window.addEventListener('DOMContentLoaded', async () => {
     }
 
     // Set the label text based on the zoom level
-    if (zoomLevel >= 16.7 && zoomLevel <= 25) {
+    if (zoomLevel >= 15 && zoomLevel <= 25) {
       textStyle.setText(feature.get('nama'));
     } else {
       textStyle.setText('');
