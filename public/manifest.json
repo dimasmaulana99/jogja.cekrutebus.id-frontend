@@ -1,6 +1,6 @@
 {
-  "name": "Dashboard-X",
-  "short_name": "Dashboard-X",
+  "name": "CekRuteBus Jogja",
+  "short_name": "CekRuteBus Jogja",
   "start_url": "./",
   "display": "standalone",
   "background_color": "#ffffff",
