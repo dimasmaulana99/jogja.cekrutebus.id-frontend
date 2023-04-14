@@ -16,6 +16,7 @@ import TileLayer from 'ol/layer/Tile.js';
 import VectorLayer from 'ol/layer/Vector.js';
 import VectorSource from 'ol/source/Vector.js';
 import GeoJSON from 'ol/format/GeoJSON.js';
+import LayerSwitcher from 'ol-ext/control/LayerSwitcher';
 import OSM from 'ol/source/OSM.js';
 import Icon from 'ol/style/Icon';
 import { Circle as CircleStyle, RegularShape, Text, Fill, Stroke, Style } from 'ol/style.js';
@@ -268,7 +269,6 @@ window.addEventListener('DOMContentLoaded', async () => {
   BusStops.setMinZoom(12.7);
   
 
-
   map = new Map({
     target: 'map',
     layers: [basemap, BusRoutes, BusStops],
@@ -278,6 +278,7 @@ window.addEventListener('DOMContentLoaded', async () => {
       zoom: 13
     })
   });
+
 
 
 // Define the popup element
@@ -294,6 +295,7 @@ const overlay = new Overlay({
   }
 });
 map.addOverlay(overlay);
+
 
 
 // Register a click event listener to the BusStops layer
