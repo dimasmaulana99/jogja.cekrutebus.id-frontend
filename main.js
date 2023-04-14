@@ -198,44 +198,75 @@ window.addEventListener('DOMContentLoaded', async () => {
     },
   });
   
- 
-  const busStopStyle = new Style({
-    image: new Icon({
-      src: './assets/images/bus_stop-12.svg',
-      imgSize: [12, 12],
-      anchor: [0.5, 0.5],
-      scale: 1.2
-    }),
-    text: new Text({
-      text: '',
-      textAlign: 'center',
-      textBaseline: 'middle',
-      font: 'bold 12px sans-serif',
-      fill: new Fill({
-        color: '#000'
-      }),
-      textShadow: '1px 1px 1px rgba(0, 0, 0, 0.5)',
-      offsetY: 20 // Adjust the vertical offset as needed
-    }),
-  });
 
   const BusStops = new VectorLayer({
     source: new VectorSource({
       url: '../api/bus-stops',
       format: new GeoJSON(),
     }),
-    style: (feature) => {
-      const zoomLevel = map.getView().getZoom();
-      if (zoomLevel >= 16.7 && zoomLevel <= 25) {
-        busStopStyle.getText().setText(feature.get('nama'));
-      } else {
-        busStopStyle.getText().setText('');
+    style: function(feature) {
+      const tipologi = feature.get('tipologi');
+      let color;
+      // Assign color based on 'tipologi' value
+      switch (tipologi) {
+        case 'Tipologi 1':
+          color = '#ff0000'; // Red
+          break;
+        case 'Tipologi 2':
+          color = '#ffa500'; // Orange
+          break;
+        case 'Tipologi 3':
+          color = '#ffff00'; // Yellow
+          break;
+        case 'Tipologi 4':
+          color = '#00ff00'; // Green
+          break;
+        case 'Tipologi 5':
+          color = '#0000FF'; // Blue
+          break;
       }
-      return busStopStyle;
+      
+      
+      const busStopStyle = new Style({
+        image: new Icon({
+          src: './assets/images/bus_stop-12.svg',
+          imgSize: [12, 12],
+          anchor: [0.5, 0.5],
+          scale: 1.2,
+          color: color
+        })
+      });
+    // Get the current zoom level
+    const zoomLevel = map.getView().getZoom();
+
+    // Check if text style exists, otherwise create a new one
+    let textStyle = busStopStyle.getText();
+    if (!textStyle) {
+      textStyle = new Text({
+        fill: new Fill({ color: '#000000' }), // Set fill color to black
+        stroke: new Stroke({ color: '#ffffff', width: 2 }), // Set stroke color to white with width 2
+        font: 'bold 10px Arial',
+        offsetX: 0,
+        offsetY: -12 // Set offset for text label
+      });
+      busStopStyle.setText(textStyle);
+    } else {
+      textStyle.setFont('bold 10px Arial'); // Set font size to 10 pixels
     }
+
+    // Set the label text based on the zoom level
+    if (zoomLevel >= 16.7 && zoomLevel <= 25) {
+      textStyle.setText(feature.get('nama'));
+    } else {
+      textStyle.setText('');
+    }
+
+      return busStopStyle;
+    },
   });
   // Set the minimum zoom level for bus stops layer
   BusStops.setMinZoom(12.7);
+  
 
 
   map = new Map({
