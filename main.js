@@ -371,12 +371,13 @@ function createBusStopPopupContent(properties) {
 
 
 let popup; // Declare popup variable outside of event handler
+let popup_route;
 
 map.on('click', (evt) => {
   map.getOverlays().getArray().slice().forEach((overlay) => {
     map.removeOverlay(overlay);
   });
-  let popup_route;
+  
   const feature = map.forEachFeatureAtPixel(
     evt.pixel,
     (feature) => feature,
@@ -410,6 +411,8 @@ map.on('click', (evt) => {
     }
   }
 
+  const bufferDistance = 15; // Define buffer distance in pixels
+
   const feature2 = map.forEachFeatureAtPixel(
     evt.pixel,
     (feature) => feature,
@@ -434,6 +437,14 @@ map.on('click', (evt) => {
     popup.getElement().innerHTML = content;
     // Set the position of the popup at the clicked pixel
     popup.setPosition(evt.coordinate);
+    // Add click event listener to photos in popup
+    const photos = popup.getElement().getElementsByClassName('bus-stop-photo');
+    Array.from(photos).forEach(photo => {
+      photo.addEventListener('click', () => {
+        const url = photo.getAttribute('data-url');
+        window.open(url, '_blank');
+      });
+    });
   } else {
     // If no bus route feature is clicked, remove the popup
     if (popup) {
@@ -441,6 +452,19 @@ map.on('click', (evt) => {
       popup = null;
     }
   }
+
+  // Check if bus stop feature is clicked within the buffer distance
+  if (feature2 && popup && evt.type === 'singleclick') {
+    const clickedPoint = evt.coordinate;
+    const busStopPoint = feature2.getGeometry().getCoordinates();
+    const distance = map
+      .getPixelFromCoordinate(clickedPoint)
+      .distanceTo(map.getPixelFromCoordinate(busStopPoint));
+    if (distance > bufferDistance) {
+      map.removeOverlay(popup);
+      popup = null;
+    }
+  }  
 });
 
 
