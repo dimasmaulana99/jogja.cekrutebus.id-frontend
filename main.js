@@ -297,7 +297,7 @@ const overlay = new Overlay({
 map.addOverlay(overlay);
 
 
-
+/*
 // Register a click event listener to the BusStops layer
 BusStops.on('click', (event) => {
   const feature = event.target.getFeatures().getArray()[0];
@@ -320,7 +320,7 @@ BusStops.on('click', (event) => {
   popupContentElement.innerHTML = content;
   overlay.setPosition(event.coordinate);
   overlay.set('id', feature.getId()); // Optional: Set an ID to the overlay for further reference
-});
+}); */
 
 
 
@@ -334,4 +334,4 @@ BusStops.on('click', (event) => {
     this.updateSize();
     return false;
   });
-});
+}); 
