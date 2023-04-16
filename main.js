@@ -349,7 +349,16 @@ function createBusStopPopupContent(properties) {
   // Loop through each property and add it to the content array if it is in the columnsToShow array
   for (const key in properties) {
     if (properties.hasOwnProperty(key) && columnsToShow.includes(key)) {
-      content.push(`<b>${key}:</b> ${properties[key]}`);
+      if (key === "photos") {
+        // Extract the "file" property from the "photos" column
+        const photos = properties[key];
+        // Loop through each photo and create an anchor element with a target="_blank" attribute to open in a new tab
+        for (const photo of photos) {
+          content.push(`<b>${key}:</b> <a href="${photo.file}" target="_blank"><img src="${photo.file}" alt="${photo.dir}" style="max-width: 200px; max-height: 150px;"></a>`);
+        }
+      } else {
+        content.push(`<b>${key}:</b> ${properties[key]}`);
+      }
     }
   }
   // Join the content array with a horizontal line separator to create the HTML content for the popup
@@ -357,6 +366,9 @@ function createBusStopPopupContent(properties) {
   // Wrap the popup content in a div with custom CSS styles
   return `<div style="background-color: white; border: 1px solid black; padding: 10px;">${popupContent}</div>`;
 }
+
+
+
 
 let popup; // Declare popup variable outside of event handler
 
