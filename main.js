@@ -322,6 +322,78 @@ BusStops.on('click', (event) => {
   overlay.set('id', feature.getId()); // Optional: Set an ID to the overlay for further reference
 }); */
 
+// Define a function to create the popup content
+function createPopupContent(properties) {
+  // Create an array to store the HTML content for the popup
+  const content = [];
+  // Loop through each property and add it to the content array
+  for (const key in properties) {
+    if (properties.hasOwnProperty(key)) {
+      content.push(`<b>${key}:</b> ${properties[key]}`);
+    }
+  }
+  // Join the content array with line breaks to create the HTML content for the popup
+  return content.join('<br>');
+}
+
+// Add a click event listener to the bus routes layer
+BusRoutes.on('click', (evt) => {
+  // Get the clicked feature
+  const feature = map.forEachFeatureAtPixel(evt.pixel, (feature) => feature);
+  if (feature) {
+    // Get the properties of the feature
+    const properties = feature.getProperties();
+    // Create the popup content
+    const content = createPopupContent(properties);
+    // Create the popup overlay
+    const popup = new Overlay({
+      element: document.createElement('div'),
+      autoPan: true,
+      autoPanAnimation: {
+        duration: 250,
+      },
+    });
+    // Set the content of the popup
+    popup.getElement().innerHTML = content;
+    // Set the position of the popup
+    popup.setPosition(evt.coordinate);
+    // Add the popup overlay to the map
+    map.addOverlay(popup);
+  }
+});
+
+// Add a click event listener to the bus stops layer
+BusStops.on('click', (evt) => {
+  // Get the clicked feature
+  const feature = map.forEachFeatureAtPixel(evt.pixel, (feature) => feature);
+  if (feature) {
+    // Get the properties of the feature
+    const properties = feature.getProperties();
+    // Create the popup content
+    const content = createPopupContent(properties);
+    // Create the popup overlay
+    const popup = new Overlay({
+      element: document.createElement('div'),
+      autoPan: true,
+      autoPanAnimation: {
+        duration: 250,
+      },
+    });
+    // Set the content of the popup
+    popup.getElement().innerHTML = content;
+    // Set the position of the popup
+    popup.setPosition(evt.coordinate);    
+    // Add the popup overlay to the map
+    map.addOverlay(popup);
+  }
+});
+
+// Close the popup when the map is clicked
+map.on('click', () => {
+  map.getOverlays().forEach((overlay) => {
+    map.removeOverlay(overlay);
+  });
+});
 
 
   map.once('postrender', function(e){
