@@ -336,63 +336,50 @@ function createPopupContent(properties) {
   return content.join('<br>');
 }
 
-// Add a click event listener to the bus routes layer
-BusRoutes.on('click', (evt) => {
-  // Get the clicked feature
-  const feature = map.forEachFeatureAtPixel(evt.pixel, (feature) => feature);
-  if (feature) {
-    // Get the properties of the feature
-    const properties = feature.getProperties();
-    // Create the popup content
-    const content = createPopupContent(properties);
-    // Create the popup overlay
-    const popup = new Overlay({
-      element: document.createElement('div'),
-      autoPan: true,
-      autoPanAnimation: {
-        duration: 250,
-      },
-    });
-    // Set the content of the popup
-    popup.getElement().innerHTML = content;
-    // Set the position of the popup
-    popup.setPosition(evt.coordinate);
-    // Add the popup overlay to the map
-    map.addOverlay(popup);
-  }
-});
-
-// Add a click event listener to the bus stops layer
-BusStops.on('click', (evt) => {
-  // Get the clicked feature
-  const feature = map.forEachFeatureAtPixel(evt.pixel, (feature) => feature);
-  if (feature) {
-    // Get the properties of the feature
-    const properties = feature.getProperties();
-    // Create the popup content
-    const content = createPopupContent(properties);
-    // Create the popup overlay
-    const popup = new Overlay({
-      element: document.createElement('div'),
-      autoPan: true,
-      autoPanAnimation: {
-        duration: 250,
-      },
-    });
-    // Set the content of the popup
-    popup.getElement().innerHTML = content;
-    // Set the position of the popup
-    popup.setPosition(evt.coordinate);    
-    // Add the popup overlay to the map
-    map.addOverlay(popup);
-  }
-});
-
-// Close the popup when the map is clicked
-map.on('click', () => {
-  map.getOverlays().forEach((overlay) => {
+map.on('click', (evt) => {
+  map.getOverlays().getArray().slice().forEach((overlay) => {
     map.removeOverlay(overlay);
   });
+
+  const feature = map.forEachFeatureAtPixel(
+    evt.pixel,
+    (feature) => feature,
+    {layerFilter: (layer) => layer === BusRoutes}
+  );
+  if (feature){
+    // Get the properties of the feature
+    const properties = feature.getProperties();
+    // Create the popup content
+    const content = createPopupContent(properties);
+    // Create the popup overlay
+    const popup = new Overlay({
+      element: document.createElement('div'),
+      autoPan: true,
+      autoPanAnimation: {
+        duration: 250,
+      },
+    });
+  }
+
+  const feature2 = map.forEachFeatureAtPixel(
+    evt.pixel,
+    (feature) => feature,
+    {layerFilter: (layer) => layer === BusStops}
+  );
+  if (feature2){
+    // Get the properties of the feature
+    const properties = feature2.getProperties();
+    // Create the popup content
+    const content = createPopupContent(properties);
+    // Create the popup overlay
+    const popup = new Overlay({
+      element: document.createElement('div'),
+      autoPan: true,
+      autoPanAnimation: {
+        duration: 250,
+      },
+    });
+  }
 });
 
 
