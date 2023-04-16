@@ -323,24 +323,48 @@ BusStops.on('click', (event) => {
 }); */
 
 // Define a function to create the popup content
-function createPopupContent(properties) {
+function createBusRoutesPopupContent(properties) {
+  // Specify the columns to be displayed in the popup for bus routes
+  const columnsToShow = ["name", "operator"];
   // Create an array to store the HTML content for the popup
   const content = [];
   // Loop through each property and add it to the content array
   for (const key in properties) {
-    if (properties.hasOwnProperty(key)) {
+    if (properties.hasOwnProperty(key) && columnsToShow.includes(key)) {
       content.push(`<b>${key}:</b> ${properties[key]}`);
     }
   }
-  // Join the content array with line breaks to create the HTML content for the popup
-  return content.join('<br>');
+  // Join the content array with a horizontal line separator to create the HTML content for the popup
+  const popupContent = content.join('<hr style="border-top: 1px solid black; margin: 5px 0;">');
+  // Wrap the popup content in a div with custom CSS styles
+  return `<div style="background-color: white; border: 1px solid black; padding: 10px;">${popupContent}</div>`;
 }
+
+// Define a function to create the popup content for bus stops
+function createBusStopPopupContent(properties) {
+  // Specify the columns to be displayed in the popup for bus stops
+  const columnsToShow = ["tipologi", "rampa", "parkir", "petugas", "kanopi", "photos"];
+  // Create an array to store the HTML content for the popup
+  const content = [];
+  // Loop through each property and add it to the content array if it is in the columnsToShow array
+  for (const key in properties) {
+    if (properties.hasOwnProperty(key) && columnsToShow.includes(key)) {
+      content.push(`<b>${key}:</b> ${properties[key]}`);
+    }
+  }
+  // Join the content array with a horizontal line separator to create the HTML content for the popup
+  const popupContent = content.join('<hr style="border-top: 1px solid black; margin: 5px 0;">');
+  // Wrap the popup content in a div with custom CSS styles
+  return `<div style="background-color: white; border: 1px solid black; padding: 10px;">${popupContent}</div>`;
+}
+
+let popup; // Declare popup variable outside of event handler
 
 map.on('click', (evt) => {
   map.getOverlays().getArray().slice().forEach((overlay) => {
     map.removeOverlay(overlay);
   });
-
+  let popup_route;
   const feature = map.forEachFeatureAtPixel(
     evt.pixel,
     (feature) => feature,
@@ -350,15 +374,28 @@ map.on('click', (evt) => {
     // Get the properties of the feature
     const properties = feature.getProperties();
     // Create the popup content
-    const content = createPopupContent(properties);
+    const content = createBusRoutesPopupContent(properties);
     // Create the popup overlay
-    const popup = new Overlay({
-      element: document.createElement('div'),
-      autoPan: true,
-      autoPanAnimation: {
-        duration: 250,
-      },
-    });
+    if (!popup_route) {
+      popup_route = new Overlay({
+        element: document.createElement('div'),
+        autoPan: true,
+        autoPanAnimation: {
+          duration: 250,
+        },
+      });
+      map.addOverlay(popup_route);
+    }
+    // Set the HTML content for the popup
+    popup_route.getElement().innerHTML = content;
+    // Set the position of the popup at the clicked pixel
+    popup_route.setPosition(evt.coordinate);
+  } else {
+    // If no bus route feature is clicked, remove the popup
+    if (popup_route) {
+      map.removeOverlay(popup_route);
+      popup_route = null;
+    }
   }
 
   const feature2 = map.forEachFeatureAtPixel(
@@ -370,17 +407,30 @@ map.on('click', (evt) => {
     // Get the properties of the feature
     const properties = feature2.getProperties();
     // Create the popup content
-    const content = createPopupContent(properties);
-    // Create the popup overlay
-    const popup = new Overlay({
-      element: document.createElement('div'),
-      autoPan: true,
-      autoPanAnimation: {
-        duration: 250,
-      },
-    });
+    const content = createBusStopPopupContent(properties);
+    if (!popup) {
+      popup = new Overlay({
+        element: document.createElement('div'),
+        autoPan: true,
+        autoPanAnimation: {
+          duration: 250,
+        },
+      });
+      map.addOverlay(popup);
+    }
+    // Set the HTML content for the popup
+    popup.getElement().innerHTML = content;
+    // Set the position of the popup at the clicked pixel
+    popup.setPosition(evt.coordinate);
+  } else {
+    // If no bus route feature is clicked, remove the popup
+    if (popup) {
+      map.removeOverlay(popup);
+      popup = null;
+    }
   }
 });
+
 
 
   map.once('postrender', function(e){
