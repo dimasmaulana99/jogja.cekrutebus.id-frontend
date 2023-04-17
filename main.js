@@ -343,7 +343,7 @@ function createBusRoutesPopupContent(properties) {
 // Define a function to create the popup content for bus stops
 function createBusStopPopupContent(properties) {
   // Specify the columns to be displayed in the popup for bus stops
-  const columnsToShow = ["tipologi", "rampa", "parkir", "petugas", "kanopi", "photos"];
+  const columnsToShow = ["nama", "tipologi", "rampa", "parkir", "petugas", "kanopi", "photos"];
   // Create an array to store the HTML content for the popup
   const content = [];
   // Loop through each property and add it to the content array if it is in the columnsToShow array
