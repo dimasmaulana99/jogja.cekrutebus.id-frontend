@@ -211,7 +211,7 @@ window.addEventListener('DOMContentLoaded', async () => {
       // Assign color based on 'tipologi' value
       switch (tipologi) {
         case 'Tipologi 1':
-          color = '#ff0000'; // Red
+          color = '#ff1500'; // Red
           break;
         case 'Tipologi 2':
           color = '#ffa500'; // Orange
