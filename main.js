@@ -16,7 +16,7 @@ import TileLayer from 'ol/layer/Tile.js';
 import VectorLayer from 'ol/layer/Vector.js';
 import VectorSource from 'ol/source/Vector.js';
 import GeoJSON from 'ol/format/GeoJSON.js';
-import LayerSwitcher from 'ol-ext/control/LayerSwitcher';
+import LayerSwitcher from 'ol-ext/control/LayerSwitcher'; 
 import OSM from 'ol/source/OSM.js';
 import Icon from 'ol/style/Icon';
 import { Circle as CircleStyle, RegularShape, Text, Fill, Stroke, Style } from 'ol/style.js';
@@ -279,6 +279,20 @@ window.addEventListener('DOMContentLoaded', async () => {
     })
   });
 
+// Create layer switcher control
+const layerSwitcher = new LayerSwitcher({
+  target: document.querySelector('#layer-switcher'),
+  show_progress: true,
+  extent: true,
+  trash: true,
+  reverse: true,
+  groupSelectStyle: 'group',
+  activationMode: 'click'
+});
+
+// Add layers to layer switcher
+layerSwitcher.addLayer(BusRoutes, 'Bus Routes');
+layerSwitcher.addLayer(BusStops, 'Bus Stops');
 
 
 // Define the popup element
