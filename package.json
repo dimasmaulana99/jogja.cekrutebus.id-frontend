@@ -30,6 +30,7 @@
     "@fontsource/roboto-serif": "^4.5.10",
     "localforage": "^1.10.0",
     "ol": "^7.1.0",
-    "ol-ext": "^4.0.7"
+    "ol-ext": "^4.0.7",
+    "ol-layerswitcher": "^4.1.1"
   }
 }

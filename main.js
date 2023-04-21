@@ -16,7 +16,7 @@ import TileLayer from 'ol/layer/Tile.js';
 import VectorLayer from 'ol/layer/Vector.js';
 import VectorSource from 'ol/source/Vector.js';
 import GeoJSON from 'ol/format/GeoJSON.js';
-import LayerSwitcher from 'ol-ext/control/LayerSwitcher'; 
+import LayerSwitcher from 'ol-layerswitcher';
 import OSM from 'ol/source/OSM.js';
 import Icon from 'ol/style/Icon';
 import { Circle as CircleStyle, RegularShape, Text, Fill, Stroke, Style } from 'ol/style.js';
@@ -75,10 +75,12 @@ window.addEventListener('DOMContentLoaded', async () => {
   });
 
   const basemap = new TileLayer({
+    title: 'OSM',
     source: new OSM()
   });
 
   const BusRoutes = new VectorLayer({
+    title: 'Bus Routes',
     source: new VectorSource({
       url: '../api/bus-routes',
       format: new GeoJSON(),
@@ -201,6 +203,7 @@ window.addEventListener('DOMContentLoaded', async () => {
   
 
   const BusStops = new VectorLayer({
+    title: 'Bus Stops',
     source: new VectorSource({
       url: '../api/bus-stops',
       format: new GeoJSON(),
@@ -291,8 +294,9 @@ const layerSwitcher = new LayerSwitcher({
 });
 
 // Add layers to layer switcher
-layerSwitcher.addLayer(BusRoutes, 'Bus Routes');
-layerSwitcher.addLayer(BusStops, 'Bus Stops');
+map.addControl(layerSwitcher)
+map.addLayer(BusRoutes);
+map.addLayer(BusStops);
 
 
 // Define the popup element
