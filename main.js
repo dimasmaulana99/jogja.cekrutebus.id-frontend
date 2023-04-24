@@ -271,16 +271,40 @@ window.addEventListener('DOMContentLoaded', async () => {
   // Set the minimum zoom level for bus stops layer
   BusStops.setMinZoom(12.7);
   
+  // Set Category each feature from "nama" column
+  const getCategory = (feature) => feature.get('name');
 
-  map = new Map({
-    target: 'map',
-    layers: [basemap, BusRoutes, BusStops],
-    controls: defaultControls({zoom: false,}),
-    view: new View({
-      center: transform([110.367088, -7.782928], 'EPSG:4326','EPSG:3857'),
-      zoom: 13
-    })
-  });
+const source = BusRoutes.getSource();
+source.once('featuresloadend', function (e) {
+  const features = e.features;
+  // dedup and sort categories
+  features
+    .map((feature) => getCategory(feature))
+    .filter((category, index, array) => array.indexOf(category) === index)
+    .sort((c1, c2) => (c1 < c2 ? -1 : 1))
+    .forEach((category) => {
+      map.addLayer(
+        new VectorLayer({
+          title: category,
+          source: source,
+          style: (feature) =>
+            getCategory(feature) === category ? style : null,
+          visible: false,
+        })
+      );
+    });
+});
+
+
+map = new Map({
+  target: 'map',
+  layers: [basemap, BusRoutes, BusStops],
+  controls: defaultControls({zoom: false,}),
+  view: new View({
+    center: transform([110.367088, -7.782928], 'EPSG:4326','EPSG:3857'),
+    zoom: 13
+  })
+});
 
 // Create layer switcher control
 const layerSwitcher = new LayerSwitcher({
