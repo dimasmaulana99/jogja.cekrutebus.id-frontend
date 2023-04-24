@@ -293,12 +293,6 @@ const layerSwitcher = new LayerSwitcher({
   activationMode: 'click'
 });
 
-// Add layers to layer switcher
-map.addControl(layerSwitcher)
-map.addLayer(BusRoutes);
-map.addLayer(BusStops);
-
-
 // Define the popup element
 const popupElement = document.createElement('div');
 popupElement.className = 'ol-popup';
@@ -312,6 +306,11 @@ const overlay = new Overlay({
     duration: 250
   }
 });
+
+// Add layers to layer switcher
+map.addControl(layerSwitcher)
+map.addLayer(BusRoutes);
+map.addLayer(BusStops);
 map.addOverlay(overlay);
 
 
