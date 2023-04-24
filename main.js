@@ -310,8 +310,8 @@ const overlay = new Overlay({
 // Add layers to layer switcher
 map.addOverlay(overlay);
 map.addControl(layerSwitcher);
-map.addLayer(BusRoutes);
-map.addLayer(BusStops);
+//map.addLayer(BusRoutes);
+//map.addLayer(BusStops);
 
 
 
