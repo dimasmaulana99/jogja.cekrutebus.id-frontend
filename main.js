@@ -313,7 +313,7 @@ const layerSwitcher = new LayerSwitcher({
   extent: true,
   trash: true,
   reverse: true,
-  groupSelectStyle: 'group',
+  groupSelectStyle: 'children',
   activationMode: 'click'
 });
 
