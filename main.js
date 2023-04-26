@@ -271,8 +271,8 @@ window.addEventListener('DOMContentLoaded', async () => {
   // Set the minimum zoom level for bus stops layer
   BusStops.setMinZoom(12.7);
   
-  // Set Category each feature from "nama" column
-  const getCategory = (feature) => feature.get('name');
+// Set Category each feature from "nama" column
+const getCategory = (feature) => feature.get('name');
 
 const source = BusRoutes.getSource();
 source.once('featuresloadend', function (e) {
@@ -313,7 +313,7 @@ const layerSwitcher = new LayerSwitcher({
   extent: true,
   trash: true,
   reverse: true,
-  groupSelectStyle: 'children',
+  groupSelectStyle: 'group',
   activationMode: 'click'
 });
 
