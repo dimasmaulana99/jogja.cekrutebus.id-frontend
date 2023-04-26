@@ -276,7 +276,7 @@ window.addEventListener('DOMContentLoaded', async () => {
 const getCategory = (feature) => feature.get('name');
 
 //Alternative 1 of Layers 
-/*const source = BusRoutes.getSource();
+const source = BusRoutes.getSource();
 source.once('featuresloadend', function (e) {
   const features = e.features;
   // dedup and sort categories
@@ -295,11 +295,11 @@ source.once('featuresloadend', function (e) {
         })
       );
     });
-}); */
+}); 
 
 //Alternative 2 of Layers
 // Create a LayerGroup for the Bus Routes and its categories
-const busRoutesGroup = new LayerGroup({
+/*const busRoutesGroup = new LayerGroup({
   title: 'Bus Routes',
 });
 
@@ -324,7 +324,7 @@ source.once('featuresloadend', function (e) {
 });
 
 // Add the Bus Routes LayerGroup to the map
-map.addLayer(busRoutesGroup);
+map.addLayer(busRoutesGroup); */
 
 
 map = new Map({
