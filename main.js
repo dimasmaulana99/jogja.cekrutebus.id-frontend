@@ -13,6 +13,7 @@ import Map from 'ol/Map.js';
 import View from 'ol/View.js';
 import Overlay from 'ol/Overlay';
 import TileLayer from 'ol/layer/Tile.js';
+import LayerGroup from 'ol/layer/Group.js';
 import VectorLayer from 'ol/layer/Vector.js';
 import VectorSource from 'ol/source/Vector.js';
 import GeoJSON from 'ol/format/GeoJSON.js';
@@ -274,7 +275,8 @@ window.addEventListener('DOMContentLoaded', async () => {
 // Set Category each feature from "nama" column
 const getCategory = (feature) => feature.get('name');
 
-const source = BusRoutes.getSource();
+//Alternative 1 of Layers 
+/*const source = BusRoutes.getSource();
 source.once('featuresloadend', function (e) {
   const features = e.features;
   // dedup and sort categories
@@ -293,7 +295,36 @@ source.once('featuresloadend', function (e) {
         })
       );
     });
+}); */
+
+//Alternative 2 of Layers
+// Create a LayerGroup for the Bus Routes and its categories
+const busRoutesGroup = new LayerGroup({
+  title: 'Bus Routes',
 });
+
+const source = BusRoutes.getSource();
+source.once('featuresloadend', function (e) {
+  const features = e.features;
+  // dedup and sort categories
+  features
+    .map((feature) => getCategory(feature))
+    .filter((category, index, array) => array.indexOf(category) === index)
+    .sort((c1, c2) => (c1 < c2 ? -1 : 1))
+    .forEach((category) => {
+      const categoryLayer = new VectorLayer({
+        title: category,
+        source: source,
+        style: (feature) =>
+          getCategory(feature) === category ? style : null,
+        visible: false,
+      });
+      busRoutesGroup.getLayers().push(categoryLayer);
+    });
+});
+
+// Add the Bus Routes LayerGroup to the map
+map.addLayer(busRoutesGroup);
 
 
 map = new Map({
