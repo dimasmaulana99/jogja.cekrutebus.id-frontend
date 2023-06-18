@@ -1,2 +1,2 @@
 # jogja.cekrutebus.id-frontend
-jogja.cekrutebus.id front-end
+This is the code we use to visualize the bus route map using OpenLayers and OpenStreetMap
